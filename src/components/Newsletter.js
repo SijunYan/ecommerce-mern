@@ -1,6 +1,7 @@
 import React from "react";
 import SendOutlinedIcon from "@mui/icons-material/SendOutlined";
 import styled from "styled-components";
+import { mobile } from "../responsive";
 
 const Container = styled.div`
   height: 600px;
@@ -9,16 +10,19 @@ const Container = styled.div`
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  ${mobile({ height: "500px" })}
 `;
 
 const Title = styled.h1`
   font-size: 70px;
   margin: 20px;
+  ${mobile({ fontSize: "50px" })}
 `;
 const Description = styled.p`
   font-size: 24px;
   font-weight: 300;
   margin-bottom: 20px;
+  ${mobile({ textAlign: "center" })}
 `;
 const InputContainer = styled.div`
   width: 50%;
@@ -27,6 +31,7 @@ const InputContainer = styled.div`
   display: flex;
   justify-content: space-between;
   border: solid 1px lightgrey;
+  ${mobile({ width: "80%" })}
 `;
 const Input = styled.input`
   border: none;
@@ -38,6 +43,7 @@ const Button = styled.button`
   border: none;
   background-color: teal;
   color: white;
+  ${mobile({ flex: 4 })}
 `;
 
 const Newsletter = () => {
