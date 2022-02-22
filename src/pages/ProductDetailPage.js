@@ -1,11 +1,15 @@
 import { Remove, Add } from "@mui/icons-material";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { useLocation } from "react-router-dom";
 import styled from "styled-components";
 import Announcement from "../components/Announcement";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import Newsletter from "../components/Newsletter";
+import { addProduct } from "../redux/cartRedux";
 import { mobile } from "../responsive";
+import { fetchData } from "../utils/fetchData";
 
 const Container = styled.div``;
 const Wrapper = styled.div`
@@ -109,48 +113,71 @@ const Button = styled.button`
 `;
 
 const ProductDetailPage = () => {
+  const location = useLocation();
+  const productId = location.pathname.split("/")[2];
+  const [product, setProduct] = useState({});
+  const [quantity, setQuantity] = useState(1);
+  const [color, setColor] = useState();
+  const [size, setSize] = useState();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const url = `/products/find/${productId}`;
+    fetchData(url).then((data) => setProduct(data));
+  }, [productId]);
+
+  const handleQuantity = (type) => {
+    if (type === "dec") {
+      setQuantity((pre) => pre - 1);
+    } else setQuantity((pre) => pre + 1);
+  };
+
+  const handleAddToCart = () => {
+    //create or update cart
+    dispatch(addProduct({ product, quantity }));
+  };
+
+  console.log(product, quantity, color, size);
+
   return (
     <Container>
       <Announcement />
       <Navbar />
       <Wrapper>
         <ImageContainer>
-          <Image src="https://images.unsplash.com/photo-1536085332992-3a0fe62e3059?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=764&q=80"></Image>
+          <Image src={product.img} />
         </ImageContainer>
         <InfoContainer>
-          <Title>Amet Consectetur</Title>
-          <Description>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam
-            accusamus omnis labore harum commodi, facilis, incidunt a magnam,
-            fugiat modi aut aliquam voluptatum tempore ex numquam beatae dolorem
-            ad qui?
-          </Description>
-          <Price>$ 56.00</Price>
+          <Title>{product.title}</Title>
+          <Description>{product.desc}</Description>
+          <Price>$ {product.price}</Price>
           <FilterContainer>
             <Filter>
               <FilterTitle>Color</FilterTitle>
-              <FilterColor color="black" />
-              <FilterColor color="darkblue" />
-              <FilterColor color="grey" />
+              {product.color?.map((item) => (
+                <FilterColor
+                  color={item}
+                  key={item}
+                  onClick={() => setColor(item)}
+                />
+              ))}
             </Filter>
             <Filter>
               <FilterTitle>Size</FilterTitle>
-              <FilterSize>
-                <FilterOption>XS</FilterOption>
-                <FilterOption>S</FilterOption>
-                <FilterOption>M</FilterOption>
-                <FilterOption>L</FilterOption>
-                <FilterOption>XL</FilterOption>
+              <FilterSize onChange={(e) => setSize(e.target.value)}>
+                {product.size?.map((item) => (
+                  <FilterOption key={item}>{item}</FilterOption>
+                ))}
               </FilterSize>
             </Filter>
           </FilterContainer>
           <AddContainer>
             <AmountContainer>
-              <Remove />
-              <Amount>5</Amount>
-              <Add />
+              <Remove onClick={() => handleQuantity("dec")} />
+              <Amount>{quantity}</Amount>
+              <Add onClick={() => handleQuantity("inc")} />
             </AmountContainer>
-            <Button>ADD TO CART</Button>
+            <Button onClick={handleAddToCart}>ADD TO CART</Button>
           </AddContainer>
         </InfoContainer>
       </Wrapper>

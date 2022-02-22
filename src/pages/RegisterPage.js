@@ -63,7 +63,8 @@ const RegisterPage = () => {
           <Input placeholder="password" />
           <Input placeholder="confirm password" />
           <Agreement>
-            Note that the development build is not optimized.
+            By creating an account. I consent to the processing of my personal
+            data in accordance with the
             <b>PRIVACY POLICY</b>
           </Agreement>
           <Button>CREATE</Button>

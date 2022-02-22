@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { mobile } from "../responsive";
+import { Link } from "react-router-dom";
 
 const Container = styled.div`
   flex: 1;
@@ -41,11 +42,13 @@ const Button = styled.button`
 const CategoryItems = ({ cate }) => {
   return (
     <Container>
-      <Image src={cate.image} />
-      <Info>
-        <Title>{cate.title}</Title>
-        <Button>SHOP NOW</Button>
-      </Info>
+      <Link to={`/products/${cate.title}`}>
+        <Image src={cate.image} />
+        <Info>
+          <Title>{cate.title}</Title>
+          <Button>SHOP NOW</Button>
+        </Info>
+      </Link>
     </Container>
   );
 };

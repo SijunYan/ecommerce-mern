@@ -54,50 +54,60 @@ export const popularProducts = [
     id: 1,
     image:
       "https://images.unsplash.com/photo-1619799360829-6689343ca0bb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80",
+    categories: ["SHOES", "SKIRTS"],
   },
   {
     id: 2,
     image:
       "https://images.unsplash.com/photo-1617074172287-f364b77c1e77?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=725&q=80",
+    categories: ["SHOES", "SKIRTS"],
   },
   {
     id: 3,
     image:
       "https://images.unsplash.com/photo-1567721913486-6585f069b332?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=688&q=80",
+    categories: ["SHOES"],
   },
   {
     id: 4,
     image:
       "https://images.unsplash.com/photo-1575858888938-1ec20abe5724?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=765&q=80",
+    categories: ["SHOES", "SHIRTS"],
   },
   {
     id: 5,
     image:
       "https://images.unsplash.com/photo-1536085332992-3a0fe62e3059?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=764&q=80",
+    categories: ["SHOES"],
   },
   {
     id: 6,
     image:
       "https://images.unsplash.com/photo-1597142177539-ca0e89ba8a11?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80",
+    categories: ["SHOES", "SHIRTS"],
   },
   {
     id: 7,
     image:
       "https://images.unsplash.com/photo-1562183241-840b8af0721e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=765&q=80",
+    categories: ["SHOES", "man"],
   },
   {
     id: 8,
     image:
       "https://images.unsplash.com/photo-1517502474097-f9b30659dadb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=627&q=80",
+    categories: ["SHOES", "man"],
   },
   {
     id: 9,
     image:
       "https://images.unsplash.com/photo-1591375275088-c37c83d2472d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=921&q=80",
+    categories: ["SHOES"],
   },
   {
     id: 10,
     image:
       "https://images.unsplash.com/photo-1581003250583-d9da381b9723?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80",
+    categories: ["SHOES"],
   },
 ];
