@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState, useEffect } from "react";
 import CartPage from "./pages/CartPage";
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
@@ -9,6 +9,7 @@ import { Routes, Route, Link, Navigate } from "react-router-dom";
 
 export default function App() {
   const user = true;
+
   return (
     <>
       <Routes>

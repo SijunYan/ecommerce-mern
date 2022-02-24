@@ -122,7 +122,7 @@ const ProductDetailPage = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const url = `/products/find/${productId}`;
+    const url = `/api/products/find/${productId}`;
     fetchData(url).then((data) => setProduct(data));
   }, [productId]);
 
@@ -134,7 +134,7 @@ const ProductDetailPage = () => {
 
   const handleAddToCart = () => {
     //create or update cart
-    dispatch(addProduct({ product, quantity }));
+    dispatch(addProduct({ ...product, color, size, quantity }));
   };
 
   console.log(product, quantity, color, size);

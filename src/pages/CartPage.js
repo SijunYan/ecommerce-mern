@@ -1,10 +1,14 @@
 import { Add, Remove } from "@mui/icons-material";
-import React from "react";
+import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import styled from "styled-components";
 import Announcement from "../components/Announcement";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import { mobile } from "../responsive";
+import { useNavigate } from "react-router-dom";
+import { loadStripe } from "@stripe/stripe-js";
+import Payment from "../components/Payment";
 
 const Container = styled.div``;
 
@@ -149,11 +153,43 @@ const SummaryButton = styled.button`
   background-color: black;
   color: white;
   font-weight: 600;
+  cursor: pointer;
 `;
 
-const CartPage = () => {
+const stripePromise = loadStripe(process.env.REACT_APP_PUBLISHABLE_API_KEY);
+const CartPage = (props) => {
+  const Navigate = useNavigate();
+  const cart = useSelector((state) => state.cart);
+
+  const [clientSecret, setClientSecret] = useState("");
+
+  const appearance = {
+    theme: "stripe",
+  };
+  const options = {
+    clientSecret,
+    appearance,
+  };
+
+  // initialize payment
+  const handlePayment = (event) => {
+    cart.products && cart.products.length > 0
+      ? fetch(`${process.env.REACT_APP_API_URL}/api/payment`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            items: [{ id: "xl-tshirt" }],
+            amount: cart.totalPrice,
+          }),
+        })
+          .then((res) => res.json())
+          .then((data) => setClientSecret(data.clientSecret))
+      : alert("The cart is empty!");
+  };
+
   return (
     <Container>
+      {clientSecret && <Payment options={options} stripe={stripePromise} />}
       <Announcement />
       <Navbar />
       <Wrapper>
@@ -164,67 +200,56 @@ const CartPage = () => {
             <TopText>Shopping Bag(2)</TopText>
             <TopText>Your Wishlist</TopText>
           </TopTexts>
-          <TopButton type="filled">CHECKOUT NOW</TopButton>
+          <TopButton type="filled" onClick={handlePayment}>
+            CHECKOUT NOW
+          </TopButton>
         </Top>
         <Bottom>
           <Info>
-            <Product>
-              <ProductDetail>
-                <Image src="https://images.unsplash.com/photo-1566150905458-1bf1fc113f0d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1171&q=80" />
-                <Details>
-                  <ProductName>
-                    <b>Product:</b> BOYHT BAGS
-                  </ProductName>
-                  <ProductID>
-                    <b>ID:</b> 2554266552
-                  </ProductID>
-                  <ProductColor color="pink" />
-                  <ProductSize>
-                    <b>Size:</b> XL
-                  </ProductSize>
-                </Details>
-              </ProductDetail>
-              <PriceDetail>
-                <ProductAmountContainer>
-                  <Remove />
-                  <ProductAmount>2</ProductAmount>
-                  <Add />
-                </ProductAmountContainer>
-                <ProductPrice>$ 5420.00</ProductPrice>
-              </PriceDetail>
-            </Product>
-            <Hr />
-            <Product>
-              <ProductDetail>
-                <Image src="https://images.unsplash.com/photo-1598532163257-ae3c6b2524b6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=763&q=80" />
-                <Details>
-                  <ProductName>
-                    <b>Product:</b> JKIDEJIYHT BAGS
-                  </ProductName>
-                  <ProductID>
-                    <b>ID:</b> 25542665de
-                  </ProductID>
-                  <ProductColor color="brown" />
-                  <ProductSize>
-                    <b>Size:</b> L
-                  </ProductSize>
-                </Details>
-              </ProductDetail>
-              <PriceDetail>
-                <ProductAmountContainer>
-                  <Remove />
-                  <ProductAmount>2</ProductAmount>
-                  <Add />
-                </ProductAmountContainer>
-                <ProductPrice>$ 3340.00</ProductPrice>
-              </PriceDetail>
-            </Product>
+            {cart.products ? (
+              cart.products.map((item, index) => (
+                <div key={index}>
+                  <Product>
+                    <ProductDetail>
+                      <Image src={item.img} />
+                      <Details>
+                        <ProductName>
+                          <b>Product:</b> {item.title}
+                        </ProductName>
+                        <ProductID>
+                          <b>ID:</b> {item._id}
+                        </ProductID>
+                        <ProductColor color={item.color} />
+                        <ProductSize>
+                          <b>Size:</b> {item.size}
+                        </ProductSize>
+                      </Details>
+                    </ProductDetail>
+                    <PriceDetail>
+                      <ProductAmountContainer>
+                        <Remove />
+                        <ProductAmount>{item.quantity}</ProductAmount>
+                        <Add />
+                      </ProductAmountContainer>
+                      <ProductPrice>
+                        $ {item.price * item.quantity}
+                      </ProductPrice>
+                    </PriceDetail>
+                  </Product>
+                  <Hr />
+                </div>
+              ))
+            ) : (
+              <div>
+                <p>Your Cart is empty</p>
+              </div>
+            )}
           </Info>
           <Summary>
             <SummaryTitle>ORDER SUMMARY</SummaryTitle>
             <SummaryItem>
               <SummaryItemText>Subtotal</SummaryItemText>
-              <SummaryItemPrice>$ 89.89</SummaryItemPrice>
+              <SummaryItemPrice>$ {cart.totalPrice}</SummaryItemPrice>
             </SummaryItem>
             <SummaryItem>
               <SummaryItemText>Estimated Shipping</SummaryItemText>
@@ -232,13 +257,13 @@ const CartPage = () => {
             </SummaryItem>
             <SummaryItem>
               <SummaryItemText>Shipping Discount</SummaryItemText>
-              <SummaryItemPrice>$ -8.00</SummaryItemPrice>
+              <SummaryItemPrice>$ -20.00</SummaryItemPrice>
             </SummaryItem>
             <SummaryItem type="total">
               <SummaryItemText>Total</SummaryItemText>
-              <SummaryItemPrice>$ 99.89</SummaryItemPrice>
+              <SummaryItemPrice>$ {cart.totalPrice}</SummaryItemPrice>
             </SummaryItem>
-            <SummaryButton>CHECKOUT NOW</SummaryButton>
+            <SummaryButton onClick={handlePayment}>CHECKOUT NOW</SummaryButton>
           </Summary>
         </Bottom>
       </Wrapper>
